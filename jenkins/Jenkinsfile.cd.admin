@@ -1,0 +1,32 @@
+pipeline {
+  agent any
+  parameters {
+    string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Image tag to deploy')
+  }
+  environment {
+    REGISTRY = "975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-aviral/admin:latest"
+    KUBECONFIG_FILE = 'kubeconfig-credential'
+    RELEASE_NAME = 'shopnow-admin'
+    NAMESPACE = 'aviral-k8'
+    CHART_PATH = 'charts/admin'
+  }
+  stages {
+    stage('Checkout') { steps { checkout scm } }
+    stage('Deploy') {
+      steps {
+        withCredentials([file(credentialsId: KUBECONFIG_FILE, variable: 'KUBECONFIG')]) {
+          sh '''
+            export KUBECONFIG=$KUBECONFIG
+            helm upgrade --install ${RELEASE_NAME} ${CHART_PATH} \
+              --namespace ${NAMESPACE} --create-namespace \
+              --set image.repository=${REGISTRY}-admin \
+              --set image.tag=${IMAGE_TAG} \
+              --wait --timeout 5m
+            kubectl rollout status deployment/${RELEASE_NAME}-admin -n ${NAMESPACE} --timeout=3m
+          '''
+        }
+      }
+    }
+  }
+}
+

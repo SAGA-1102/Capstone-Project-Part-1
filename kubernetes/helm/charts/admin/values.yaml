@@ -1,0 +1,83 @@
+replicaCount: 1
+
+image:
+  repository: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-aviral/admin
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+nginx:
+  enableConfigMap: true
+  config: |
+    server {
+      listen 80;
+      server_name _;
+      root /usr/share/nginx/html;
+      index index.html;
+
+      # Admin API - proxy to backend for aryan-admin (general catch-all)
+      location /aryan-admin/api/ {
+        proxy_pass http://backend:5000/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 90;
+      }
+      
+      # Handle static assets within /aryan-admin/static/ - map to /static/
+      location /aryan-admin/static/ {
+        alias /usr/share/nginx/html/static/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+      }
+      
+      # Handle other static assets (favicon, etc.) within /aryan-admin/
+      location ~ ^/aryan-admin/(.*\.(css|js|map|svg|gif|png|jpg|jpeg|ico|woff2?|ttf|eot))$ {
+        alias /usr/share/nginx/html/$1;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+      }
+      
+      # Handle /aryan-admin path - serve the React app
+      # This catches all paths and serves index.html for SPA routing
+      location / {
+        try_files $uri $uri/ /index.html;
+      }
+      
+      # Health check
+      location = /health {
+        return 200 'OK';
+        add_header Content-Type text/plain;
+      }
+      
+      # Security headers
+      add_header X-Content-Type-Options nosniff;
+      add_header X-Frame-Options DENY;
+    }
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: true
+  path: /aviral-admin
+  pathType: Prefix
+  host: ""                      # optional host; leave blank for path-only routing
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  ingressClassName: nginx

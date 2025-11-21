@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-aviral/backend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5000
+
+config:
+  MONGODB_HOST: mongo
+  MONGODB_PORT: "27017"
+  APP_ENV: "k8s-demo"
+
+secret:
+  enabled: true
+  MONGODB_URI: mongodb://shopuser:ShopNowPass123@mongo-0.mongo-headless.shopnow-demo.svc.cluster.local:27017/shopnow?authSource=admin
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "200Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80

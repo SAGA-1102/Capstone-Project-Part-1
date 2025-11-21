@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shopnow-ingress
+  namespace: aviral-k8
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /aviral-admin
+        pathType: Prefix
+        backend:
+          service:
+            name: admin
+            port:
+              number: 80
+      - path: /aviral
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80

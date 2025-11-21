@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-logger
+  namespace: aviral-k8
+spec:
+  selector:
+    matchLabels:
+      name: node-logger
+  template:
+    metadata:
+      labels:
+        name: node-logger
+    spec:
+      containers:
+      - name: node-logger
+        image: busybox
+        command: ["/bin/sh", "-c", "while true; do echo \"log from $(hostname) $(date)\" >> /var/log/node-logger.log; sleep 60; done"]
+        volumeMounts:
+        - name: host-logs
+          mountPath: /var/log
+      volumes:
+      - name: host-logs
+        hostPath:
+          path: /var/log
+          type: DirectoryOrCreate
+

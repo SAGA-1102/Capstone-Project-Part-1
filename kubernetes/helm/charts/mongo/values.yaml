@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  repository: mongo
+  tag: "6.0"
+  pullPolicy: IfNotPresent
+
+service:
+  port: 27017
+  headlessName: mongo-headless
+
+stateful:
+  volume:
+    storageClassName: gp3-ssd
+    storage: 5Gi
+
+resources:
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+  limits:
+    cpu: "1"
+    memory: "1Gi"
+
+readinessProbe:
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+
+# Demo-only retention policy
+# When this StatefulSet is deleted, PVCs created from volumeClaimTemplates will be deleted.
+# When the StatefulSet is scaled down, PVCs for removed replicas will be deleted.
+persistentVolumeClaimRetentionPolicy:
+  whenDeleted: Delete
+  whenScaled: Delete
+
+terminationGracePeriodSeconds: 30

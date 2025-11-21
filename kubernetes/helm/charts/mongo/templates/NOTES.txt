@@ -1,0 +1,10 @@
+Mongo chart:
+- To use StatefulSet (default): set useStateful: true
+  helm install my-mongo ./charts/mongo --set useStateful=true
+
+- To use Deployment + single PVC:
+  helm install my-mongo ./charts/mongo --set useStateful=false
+
+- After StatefulSet install check PVCs:
+  kubectl get sts -n <namespace>
+  kubectl get pvc -n <namespace>

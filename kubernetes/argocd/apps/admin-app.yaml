@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/aviral31/shopNow'
+    targetRevision: HEAD
+    path: kubernetes/helm/charts/admin
+    helm:
+      valueFiles: []
+      releaseName: admin
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: aviral-k8
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  namespace: aviral-k8
+  labels:
+    app: mongo
+spec:
+  serviceName: mongo-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  # <<< Demo-only retention policy >>> 
+  # When this StatefulSet is deleted, PVCs created from volumeClaimTemplates will be deleted.
+  # When the StatefulSet is scaled down, PVCs for removed replicas will be deleted.
+  # This is important in demo env as they will delete the EBS volumes from the AWS account as well
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Delete
+    whenScaled: Delete
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: mongo
+        image: mongo:6.0
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-pvc
+          mountPath: /data/db
+        readinessProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 20
+          timeoutSeconds: 5
+          periodSeconds: 10
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-pvc
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: gp3-ssd
+      resources:
+        requests:
+          storage: 5Gi
