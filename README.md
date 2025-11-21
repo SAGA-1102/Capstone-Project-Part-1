@@ -221,7 +221,7 @@ exit
 kubectl rollout restart deploy backend -n aviral-k8
 ```
 
-### 3. Check the resources deployed
+### 4. Check the resources deployed
 
 ```bash
 # Check Pods
