@@ -265,7 +265,6 @@ kubectl logs backend-746cc99cd-cqrgf -n aviral-k8 --previous # If no details are
 ---
 
 ## Screenshots
-![Architecture diagram](Screenshots/architecture.png)
 ![AWS Configure](Screenshots/awsconfigure.png)
 ![Cluster Info](Screenshots/clusterinfo.png)
 ![Namespace and Secret](Screenshots/nsanddockersecret.png)
