@@ -10,7 +10,7 @@ This project teaches **Kubernetes** from container basics to production-ready de
 
 ## 🎯 Learning Objectives
 - Write Dockerfiles for containerising the application
-- Master Kubernetes fundamentals through hands-on practice
+- Write Kubernetes manifest files for container orchestration
 - Understand and implement HELM Chart for application deployment on kubernetes
 - Implement GitOps workflows using ArgoCD
 - Implement CICD pipelines using Jenkins
@@ -66,7 +66,7 @@ aws configure
 # Or use environment variables
 export AWS_ACCESS_KEY_ID=your-access-key
 export AWS_SECRET_ACCESS_KEY=your-secret-key
-export AWS_DEFAULT_REGION=us-east-1
+export AWS_DEFAULT_REGION=ca-central-1
 
 # If above credentials are already set, run below command to verify
 aws sts get-caller-identity
