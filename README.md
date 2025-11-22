@@ -28,20 +28,6 @@ shopNow/
 
 ---
 
-## 🚀 Learning Journey
-
-### Container & Kubernetes Basics
-1. **Start Here**: [docs/K8S-CONCEPTS.md](docs/K8S-CONCEPTS.md) - Core concepts explained
-2. **Raw Kubernetes Manifests**: `kubernetes/k8s-manifests/`
-
-### Package Management & Automation  
-3. **Helm Charts**: `kubernetes/helm/`
-4. **CI/CD Pipelines**: `jenkins/`
-
-### GitOps & Production Readiness
-5. **ArgoCD GitOps**: `kubernetes/argocd/`
-
-
 ## Getting Started
 
 ## 🛠 Prerequisites & Setup
