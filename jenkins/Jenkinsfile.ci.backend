@@ -37,7 +37,7 @@ pipeline {
 
     stage('Trigger CD') {
       steps {
-        build job: 'deploy-cd-eks',
+        build job: 'shopnow-cd-eks',
         parameters: [
         string(name: 'IMAGE_TAG', value: IMAGE_TAG),
        string(name: 'SERVICE', value: "backend")]
