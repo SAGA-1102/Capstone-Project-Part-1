@@ -1,0 +1,53 @@
+pipeline {
+  agent any
+
+  parameters {
+    string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Image tag to deploy')
+    string(name: 'SERVICE', defaultValue: 'backend', description: 'Service to deploy (admin, backend, frontend)')
+  }
+
+  environment {
+    AWS_ACCOUNT_ID   = "975050024946"
+    AWS_REGION       = "ca-central-1"
+    ECR              = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/shopnow-aviral"
+    NAMESPACE        = "aviral-k8"
+    KUBECONFIG_FILE  = "kubeconfig-credential"
+    HELM_CHART_PATH  = "shopNow/kubernetes/helm/charts"
+  }
+
+  stages {
+
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+
+    stage('Deploy Selected Service') {
+      steps {
+        script {
+          echo "Deploying service: ${SERVICE}"
+
+          def releaseName = "shopnow-${SERVICE}"
+          def chartPath   = "${HELM_CHART_PATH}/${SERVICE}"
+          def imageRepo   = "${ECR}/${SERVICE}"
+
+          withCredentials([file(credentialsId: KUBECONFIG_FILE, variable: 'KUBECONFIG')]) {
+            sh """
+              export KUBECONFIG=$KUBECONFIG
+              helm upgrade --install ${releaseName} ${chartPath} \
+                --namespace ${NAMESPACE} --create-namespace \
+                --set image.repository=${imageRepo} \
+                --set image.tag=${IMAGE_TAG} \
+                --wait --timeout 5m
+              kubectl rollout status deployment/${releaseName}-${SERVICE} -n ${NAMESPACE} --timeout=3m
+            """
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    success { echo "🎉 SUCCESS: ${SERVICE} deployed successfully using tag ${IMAGE_TAG}" }
+    failure { echo "❗ FAILURE: deployment failed for ${SERVICE}" }
+  }
+}
