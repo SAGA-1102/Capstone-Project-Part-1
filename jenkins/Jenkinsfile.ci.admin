@@ -6,23 +6,44 @@ pipeline {
     ECR              = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/shopnow-aviral/admin"
     IMAGE_TAG        = ""
   }
+
   stages {
 
     stage('Checkout') { 
       steps { checkout scm } 
     }
 
-    stage('Set Image Tag') { 
-      steps { script { IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim() } } 
+    stage('Verify changes') {
+      when {
+        changeset "admin/**"
+      }
+      steps {
+        echo "Changes detected in admin — proceeding with pipeline"
+      }
+    }
+
+    stage('Set Image Tag') {
+      when {
+        changeset "admin/**"
+      }
+      steps {
+        script { IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim() }
+      }
     }
 
     stage('Login to AWS ECR') {
+      when {
+        changeset "admin/**"
+      }
       steps {
         sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
       }
     }
 
     stage('Build & Push Image') {
+      when {
+        changeset "admin/**"
+      }
       steps {
         dir('admin') {
           sh """
@@ -34,14 +55,24 @@ pipeline {
     }
 
     stage('Trigger CD') {
+      when {
+        changeset "admin/**"
+      }
       steps {
         build job: 'shopnow-cd-eks',
         parameters: [
-        string(name: 'IMAGE_TAG', value: IMAGE_TAG),
-        string(name: 'SERVICE', value: "admin")]
+          string(name: 'IMAGE_TAG', value: IMAGE_TAG),
+          string(name: 'SERVICE', value: "admin")
+        ]
       }
     }
 
   }
-  post { always { cleanWs() } }
+
+  post {
+    success {
+      echo "Admin CI complete — only triggered because admin changed"
+    }
+    always { cleanWs() }
+  }
 }

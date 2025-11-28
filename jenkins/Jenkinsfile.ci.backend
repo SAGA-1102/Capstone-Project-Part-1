@@ -8,23 +8,41 @@ pipeline {
   }
   stages {
 
-    stage('Checkout') { 
-      steps { checkout scm } 
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+
+    stage('Verify changes') {
+      when {
+        changeset "backend/**"
+      }
+      steps {
+        echo "Changes detected in backend — running CI"
+      }
     }
 
     stage('Set Image Tag') {
+      when {
+        changeset "backend/**"
+      }
       steps {
         script { IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim() }
       }
     }
 
     stage('Login to AWS ECR') {
+      when {
+        changeset "backend/**"
+      }
       steps {
         sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
       }
     }
 
     stage('Build & Push Image') {
+      when {
+        changeset "backend/**"
+      }
       steps {
         dir('backend') {
           sh """
@@ -36,15 +54,24 @@ pipeline {
     }
 
     stage('Trigger CD') {
+      when {
+        changeset "backend/**"
+      }
       steps {
         build job: 'shopnow-cd-eks',
         parameters: [
-        string(name: 'IMAGE_TAG', value: IMAGE_TAG),
-       string(name: 'SERVICE', value: "backend")]
-
+          string(name: 'IMAGE_TAG', value: IMAGE_TAG),
+          string(name: 'SERVICE', value: "backend")
+        ]
       }
     }
 
   }
-  post { always { cleanWs() } }
+
+  post {
+    success {
+      echo "Backend CI complete — only ran because backend changed"
+    }
+    always { cleanWs() }
+  }
 }
