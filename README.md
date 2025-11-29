@@ -101,6 +101,12 @@ Terraform provisions the complete AWS foundation required for running Kubernetes
 
 A fully provisioned, highly available AWS environment ready for Kubernetes workloads, complete with networking, IAM, EKS control plane, and managed worker nodes.
 
+<img width="1517" height="839" alt="Screenshot 2025-11-29 142238" src="https://github.com/user-attachments/assets/881a8e4c-1c2b-4665-a8f5-c0c40ba20c51" />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img width="1467" height="689" alt="Screenshot 2025-11-29 142338" src="https://github.com/user-attachments/assets/eab64535-a61a-47ee-a924-162fdbfed957" />
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
 
 #### 3. Kubernetes Cluster Access (Make sure to have a running Kubernetes cluster, here is an example to connect with EKS)
 ```bash
