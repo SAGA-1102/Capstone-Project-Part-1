@@ -38,7 +38,7 @@ shopNow/
 ```bash
 # Setup AWS credentials first
 aws configure
-# Enter your AWS Access Key ID, Secret Access Key, region (ca-central1), and output format (json)
+# Enter your AWS Access Key ID, Secret Access Key, region (ca-central-1), and output format (json)
 
 # Or use environment variables
 export AWS_ACCESS_KEY_ID=your-access-key
@@ -159,7 +159,7 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # Create target namespace
-kubectl create namespace aviral-k8
+kubectl create namespace shopnow-demo1
 
 # Deploy applications
 kubectl apply -f kubernetes/argocd/umbrella-application.yaml
@@ -195,7 +195,7 @@ db.createUser({
 exit
 
 # Restart backend deployment
-kubectl rollout restart deploy backend -n aviral-k8
+kubectl rollout restart deploy backend -n shopnow-demo1
 ```
 
 ### 4. Check the resources deployed
