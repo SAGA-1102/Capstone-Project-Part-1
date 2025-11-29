@@ -9,7 +9,6 @@ ShopNow is a **Capstone project** built around a full-stack MERN e-commerce appl
  - **Customer App** (React frontend)  
  - **Admin Dashboard** (React admin panel)  
  - **Backend API** (Express + MongoDB)  
-
 Each component is versioned, dockerized, and deployed individually, allowing independent updates and rapid iteration.
 ---
 
