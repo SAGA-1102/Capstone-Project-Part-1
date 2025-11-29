@@ -67,6 +67,41 @@ aws ecr create-repository --repository-name <your-username>-shopnow/admin --regi
 aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account-id>.dkr.ecr.<region>.amazonaws.com
 ```
 
+#### 3. Terraform Infrastructure Creation
+
+Terraform provisions the complete AWS foundation required for running Kubernetes on EKS:
+
+✔ Networking Setup (Across 2 AZs)
+
+- Creates a VPC (10.123.0.0/16) with DNS support enabled.
+- Builds two public subnets and two private subnets, each mapped to separate availability zones.
+- Adds an Internet Gateway for public networking and Elastic IPs + NAT Gateways to allow secure outbound access from private subnets.
+- Configures public & private route tables with correct routing to IGW and NAT, and associates them with respective subnets.
+
+✔ IAM Roles & Security
+
+- Creates IAM roles for:
+- EKS cluster → ClusterPolicy, ServicePolicy
+- Worker nodes → WorkerNodePolicy, ECR ReadOnly, CNI Policy
+- Ensures proper permissions for both control plane and node operations.
+
+✔ EKS Cluster Setup
+
+- Deploys an EKS cluster (ash-mern) running Kubernetes v1.31, using the private subnets.
+- Enables public endpoint access for kubectl.
+- Generates outputs including cluster endpoint, CA, and a kubeconfig template.
+
+✔ Managed Node Group
+
+- Creates a node group with t3.medium EC2 instances.
+- Autoscaling enabled: min 1, desired 2, max 3.
+- Nodes run inside the private subnets for improved security.
+
+✔ Outcome
+
+A fully provisioned, highly available AWS environment ready for Kubernetes workloads, complete with networking, IAM, EKS control plane, and managed worker nodes.
+
+
 #### 3. Kubernetes Cluster Access (Make sure to have a running Kubernetes cluster, here is an example to connect with EKS)
 ```bash
 # For EKS cluster
