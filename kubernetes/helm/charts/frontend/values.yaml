@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-aviral/frontend
+  repository: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-ash/frontend
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -18,8 +18,8 @@ nginx:
       root /usr/share/nginx/html;
       index index.html;
       
-      # Frontend API - proxy to backend for aryan
-      location /aryan/api/ {
+      # Frontend API - proxy to backend for ash
+      location /ash/api/ {
         proxy_pass http://backend:5000/api/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -28,21 +28,21 @@ nginx:
         proxy_read_timeout 90;
       }
       
-      # Handle static assets within /aryan/static/ - map to /static/
-      location /aryan/static/ {
+      # Handle static assets within /ash/static/ - map to /static/
+      location /ash/static/ {
         alias /usr/share/nginx/html/static/;
         expires 30d;
         add_header Cache-Control "public, immutable";
       }
       
-      # Handle other static assets (favicon, etc.) within /aryan/
-      location ~ ^/aryan/(.*\.(css|js|map|svg|gif|png|jpg|jpeg|ico|woff2?|ttf|eot))$ {
+      # Handle other static assets (favicon, etc.) within /ash/
+      location ~ ^/ash/(.*\.(css|js|map|svg|gif|png|jpg|jpeg|ico|woff2?|ttf|eot))$ {
         alias /usr/share/nginx/html/$1;
         expires 30d;
         add_header Cache-Control "public, immutable";
       }
       
-      # Handle /aryan path - serve the React app
+      # Handle /ash path - serve the React app
       # This catches all paths and serves index.html for SPA routing
       location / {
         try_files $uri $uri/ /index.html;
@@ -74,7 +74,7 @@ livenessProbe:
   periodSeconds: 20
 
 readinessProbe:
-  path: /
+  path: /health
   port: 80
   initialDelaySeconds: 5
   periodSeconds: 10
@@ -87,7 +87,7 @@ hpa:
 
 ingress:
   enabled: true
-  path: /aviral   # path for routing; e.g., /shopnow
+  path: /ash
   pathType: Prefix
   host: ""                      # optional host; leave blank for path-only routing
   annotations:
