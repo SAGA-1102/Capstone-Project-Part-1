@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-aviral/backend
+  repository: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-ash/backend
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -16,7 +16,8 @@ config:
 
 secret:
   enabled: true
-  MONGODB_URI: mongodb://shopuser:ShopNowPass123@mongo-0.mongo-headless.shopnow-demo.svc.cluster.local:27017/shopnow?authSource=admin
+  MONGODB_URI: mongodb+srv://arya:qwerty123@cluster0.zhayp2s.mongodb.net/shopnow
+  
 
 resources:
   requests:
