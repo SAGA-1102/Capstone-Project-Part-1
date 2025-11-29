@@ -101,6 +101,8 @@ Terraform provisions the complete AWS foundation required for running Kubernetes
 
 A fully provisioned, highly available AWS environment ready for Kubernetes workloads, complete with networking, IAM, EKS control plane, and managed worker nodes.
 
+<img width="1050" height="572" alt="terraform_apply" src="https://github.com/user-attachments/assets/7e812765-2877-4f24-aa90-0bdb362d1d5c" />
+
 <img width="1517" height="839" alt="Screenshot 2025-11-29 142238" src="https://github.com/user-attachments/assets/881a8e4c-1c2b-4665-a8f5-c0c40ba20c51" />
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img width="1467" height="689" alt="Screenshot 2025-11-29 142338" src="https://github.com/user-attachments/assets/eab64535-a61a-47ee-a924-162fdbfed957" />
@@ -108,7 +110,7 @@ A fully provisioned, highly available AWS environment ready for Kubernetes workl
 &nbsp;&nbsp;&nbsp;&nbsp;
 
 
-#### 3. Kubernetes Cluster Access (Make sure to have a running Kubernetes cluster, here is an example to connect with EKS)
+#### 4. Kubernetes Cluster Access (Make sure to have a running Kubernetes cluster, here is an example to connect with EKS)
 ```bash
 # For EKS cluster
 aws eks update-kubeconfig --region <region> --name <your-cluster-name>
@@ -117,10 +119,11 @@ aws eks update-kubeconfig --region <region> --name <your-cluster-name>
 kubectl cluster-info
 kubectl get nodes
 ```
+<img width="945" height="355" alt="Screenshot 2025-11-29 143825" src="https://github.com/user-attachments/assets/6e3dae43-7fc9-4c62-a98c-4bc17e970f63" />
 
 Note: All the below mentioned kubectl commands assume that you are working with "shopnow-demo1" namespace, update the namespace as per yours where ever you find "shopnow-demo1".
 
-#### 4. Docker Registry Secret
+#### 5. Docker Registry Secret
 
 ```bash
 # Create registry secret for private ECR image pulls
@@ -128,7 +131,7 @@ kubectl create ns shopnow-demo1
 kubectl create secret docker-registry ecr-secret --docker-server=<account-id>.dkr.ecr.ca-central-1.amazonaws.com --docker-username=AWS --docker-password=$(aws ecr get-login-password --region ca-central-1) --namespace=shopnow-demo1
 ```
 
-#### 5. Install Pre-requisites in the Kubernetes Environment (Has to be done once per Kubernetes Cluster)
+#### 6. Install Pre-requisites in the Kubernetes Environment (Has to be done once per Kubernetes Cluster)
 ```bash
 # Install metrics server (required for resource monitoring and HPA)
 kubectl apply -f kubernetes/pre-req/metrics-server.yaml
@@ -199,6 +202,7 @@ helm upgrade --install backend kubernetes/helm/charts/backend -n shopnow-demo1
 helm upgrade --install frontend kubernetes/helm/charts/frontend -n shopnow-demo1
 helm upgrade --install admin kubernetes/helm/charts/admin -n shopnow-demo1
 ```
+
 
 **Option C: ArgoCD GitOps**
 ```bash
@@ -279,6 +283,11 @@ kubectl get secrets -n shopnow-demo1
 # Check ingress
 kubectl get ing -n shopnow-demo1
 
+<img width="902" height="877" alt="Screenshot 2025-11-28 185658" src="https://github.com/user-attachments/assets/b26df25a-15fa-4a8b-95a3-2f8a4ef6b93b" />
+
+<img width="937" height="492" alt="Screenshot 2025-11-28 185605" src="https://github.com/user-attachments/assets/edee521e-6330-4094-b43f-92dd829bcb47" />
+
+
 # Sequence to debug in case of any issue with the pods
 kubectl get pods -n shopnow-demo1
 kubectl describe pod backend-746cc99cd-cqrgf -n shopnow-demo1 # Assuming that pod backend-746cc99cd-cqrgf has an error
@@ -290,11 +299,17 @@ kubectl logs backend-746cc99cd-cqrgf -n shopnow-demo1 --previous # If no details
 ---
 
 ## Screenshots
-![AWS Configure](Screenshots/awsconfigure.png)
-![Cluster Info](Screenshots/clusterinfo.png)
-![Namespace and Secret](Screenshots/nsanddockersecret.png)
-![Pods Info](Screenshots/podsinfo.png)
-![Service and Ingress Info](Screenshots/serviceinfo.png)
+
+<img width="1189" height="92" alt="Untitled" src="https://github.com/user-attachments/assets/3f2aa65e-9c2e-4387-86b7-c32075dadd86" />
+
+
+<img width="1903" height="1023" alt="Screenshot 2025-11-28 184549" src="https://github.com/user-attachments/assets/6cf9e219-8f3d-4ccf-8d0f-b5d4656902f6" />
+
+<img width="1905" height="976" alt="Screenshot 2025-11-28 184642" src="https://github.com/user-attachments/assets/2566778e-e58e-482f-b62b-44a3ed4cc6de" />
+
+<img width="1883" height="967" alt="Screenshot 2025-11-28 185715" src="https://github.com/user-attachments/assets/86dfbc8a-ede8-4f92-8468-1bd5972b7490" />
+
+
 
 ---
 
