@@ -38,7 +38,7 @@ shopNow/
 ```bash
 # Setup AWS credentials first
 aws configure
-# Enter your AWS Access Key ID, Secret Access Key, region (us-east-1), and output format (json)
+# Enter your AWS Access Key ID, Secret Access Key, region (ca-central1), and output format (json)
 
 # Or use environment variables
 export AWS_ACCESS_KEY_ID=your-access-key
@@ -70,14 +70,14 @@ kubectl cluster-info
 kubectl get nodes
 ```
 
-Note: All the below mentioned kubectl commands assume that you are working with "aviral-k8" namespace, update the namespace as per yours where ever you find "aviral-k8".
+Note: All the below mentioned kubectl commands assume that you are working with "shopnow-demo1" namespace, update the namespace as per yours where ever you find "shopnow-demo1".
 
 #### 4. Docker Registry Secret
 
 ```bash
 # Create registry secret for private ECR image pulls
-kubectl create ns aviral-k8
-kubectl create secret docker-registry ecr-secret --docker-server=<account-id>.dkr.ecr.ca-central-1.amazonaws.com --docker-username=AWS --docker-password=$(aws ecr get-login-password --region ca-central-1) --namespace=aviral-k8
+kubectl create ns shopnow-demo1
+kubectl create secret docker-registry ecr-secret --docker-server=<account-id>.dkr.ecr.ca-central-1.amazonaws.com --docker-username=AWS --docker-password=$(aws ecr get-login-password --region ca-central-1) --namespace=shopnow-demo1
 ```
 
 #### 5. Install Pre-requisites in the Kubernetes Environment (Has to be done once per Kubernetes Cluster)
@@ -146,10 +146,10 @@ kubectl apply -f kubernetes/k8s-manifests/daemonsets-example/
 **Option B: Helm Charts**
 
 ```bash
-helm upgrade --install mongo kubernetes/helm/charts/mongo -n aviral-k8 --create-namespace
-helm upgrade --install backend kubernetes/helm/charts/backend -n aviral-k8
-helm upgrade --install frontend kubernetes/helm/charts/frontend -n aviral-k8
-helm upgrade --install admin kubernetes/helm/charts/admin -n aviral-k8
+helm upgrade --install mongo kubernetes/helm/charts/mongo -n shopnow-demo1 --create-namespace
+helm upgrade --install backend kubernetes/helm/charts/backend -n shopnow-demo1
+helm upgrade --install frontend kubernetes/helm/charts/frontend -n shopnow-demo1
+helm upgrade --install admin kubernetes/helm/charts/admin -n shopnow-demo1
 ```
 
 **Option C: ArgoCD GitOps**
@@ -174,12 +174,12 @@ kubectl get applications -n argocd
 ```bash
 
 # check the status of the mongo-0 pods 
-kubectl get pods -n aviral-k8
+kubectl get pods -n shopnow-demo1
 
 # if mongo-0 pod is healthy, then run following command to create a user for the backend to connect
 # user credentials should be same as mentioned in the backend secrets-db.yaml file
 # First exex into the pods
-kubectl -n aviral-k8 exec -it mongo-0 -- mongosh
+kubectl -n shopnow-demo1 exec -it mongo-0 -- mongosh
 
 # Run below commands
 use admin;
@@ -202,39 +202,39 @@ kubectl rollout restart deploy backend -n aviral-k8
 
 ```bash
 # Check Pods
-kubectl get pods -n aviral-k8
+kubectl get pods -n shopnow-demo1
 
 # Check Deployment
-kubectl get deploy -n aviral-k8
+kubectl get deploy -n shopnow-demo1
 
 # Check Services
-kubectl get svc -n aviral-k8
+kubectl get svc -n shopnow-demo1
 
 # Check daemonsets
-kubectl get daemonsets -n aviral-k8
+kubectl get daemonsets -n shopnow-demo1
 
 # Check statefulsets
-kubectl get statefulsets -n aviral-k8
+kubectl get statefulsets -n shopnow-demo1
 
 # Check HPA
-kubectl get hpa -n aviral-k8
+kubectl get hpa -n shopnow-demo1
 
 # Check all of the above at once
-kubectl get all -n aviral-k8
+kubectl get all -n shopnow-demo1
 
 # Check configmaps
-kubectl get cm -n aviral-k8
+kubectl get cm -n shopnow-demo1
 
 # Check secrets
-kubectl get secrets -n aviral-k8
+kubectl get secrets -n shopnow-demo1
 
 # Check ingress
-kubectl get ing -n aviral-k8
+kubectl get ing -n shopnow-demo1
 
 # Sequence to debug in case of any issue with the pods
-kubectl get pods -n aviral-k8
-kubectl describe pod backend-746cc99cd-cqrgf -n aviral-k8 # Assuming that pod backend-746cc99cd-cqrgf has an error
-kubectl logs backend-746cc99cd-cqrgf -n aviral-k8 --previous # If no details are found in the above command or if details like liveness probe failed are coming
+kubectl get pods -n shopnow-demo1
+kubectl describe pod backend-746cc99cd-cqrgf -n shopnow-demo1 # Assuming that pod backend-746cc99cd-cqrgf has an error
+kubectl logs backend-746cc99cd-cqrgf -n shopnow-demo1 --previous # If no details are found in the above command or if details like liveness probe failed are coming
 
 ```
 
@@ -263,5 +263,5 @@ kubectl logs backend-746cc99cd-cqrgf -n aviral-k8 --previous # If no details are
 - Aviral Paliwal
 - Aishwarya Patil
 - Sanidhya Gadgil
-- Munit
+
 ---
