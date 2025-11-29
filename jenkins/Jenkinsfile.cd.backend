@@ -5,7 +5,7 @@ pipeline {
   }
   environment {
     REGISTRY = "975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-aviral/backend:latest"
-    KUBECONFIG_FILE = 'kubeconfig-credential'
+    KUBECONFIG_FILE = 'kubeconfig-credential-shopnow-capstone'
     RELEASE_NAME = 'shopnow-backend'
     NAMESPACE = 'aviral-k8'
     CHART_PATH = 'charts/backend'

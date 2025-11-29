@@ -5,7 +5,7 @@ pipeline {
   }
   environment {
     REGISTRY = "975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-aviral/frontend:latest"
-    KUBECONFIG_FILE = 'kubeconfig-credential' // Jenkins file credential containing kubeconfig
+    KUBECONFIG_FILE = 'kubeconfig-credential-shopnow-capstone' // Jenkins file credential containing kubeconfig
     RELEASE_NAME = 'shopnow-frontend'
     NAMESPACE = 'aviral-k8'
     CHART_PATH = 'charts/frontend'

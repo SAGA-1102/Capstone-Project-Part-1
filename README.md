@@ -1,16 +1,15 @@
 
 # 🛒 ShopNow E-Commerce - Capstone Project
 
-This project delivers a fully automated CI/CD workflow where Terraform builds the entire AWS setup—including VPC, subnets, NAT, and an EKS cluster—while Jenkins handles the application lifecycle end to end. Each service is containerized with Docker, Jenkins builds and tags the images, pushes them to ECR, and then triggers Helm deployments to EKS. The cluster pulls the latest images, updates the services automatically, and exposes the application through an AWS Load Balancer DNS. The result is a clean, efficient DevOps pipeline with zero manual deployment steps and smooth, repeatable releases.
+ShopNow is a complete end-to-end DevOps-driven e-commerce platform featuring a full-stack MERN application with fully automated infrastructure provisioning and deployment. Terraform provisions all AWS resources including VPC, networking layers, IAM, and EKS, while Jenkins orchestrates application containerization, image delivery to ECR, and automated rollout into the Kubernetes cluster via Helm — achieving fully unattended CI/CD execution.
 
 ---
-
 
 ShopNow is a **Capstone project** built around a full-stack MERN e-commerce application:
 - **Customer App** (React frontend)  
 - **Admin Dashboard** (React admin panel)  
 - **Backend API** (Express + MongoDB)  
-
+Each component is versioned, dockerized, and deployed individually, allowing independent updates and rapid iteration.
 ---
 
 ## 📁 Project Structure
@@ -34,6 +33,44 @@ shopNow/
 ```
 
 ---
+## 🚀 CI/CD With Jenkins
+
+- This project includes a production-grade Jenkins automation pipeline that supports complete CI/CD    delivery:
+
+- There are three dedicated Jenkinsfiles for CI — one each for:
+
+  ```bash
+  backend 
+  ```
+  ```bash
+  frontend
+  ```
+  ```bash
+  admin
+  ```
+- A commit in any of these folders only triggers CI for that specific service
+
+- Each CI pipeline:
+
+   - builds the Docker image
+
+   - tags it properly
+
+   - pushes it to AWS ECR
+
+- After CI completes, each CI pipeline triggers a common CD pipeline
+
+- The shared CD pipeline:
+
+  - pulls the updated container image
+
+  - deploys it to EKS using Helm
+
+  - performs rolling updates with zero downtime
+
+- Webhooks ensure builds only run when required — preventing unnecessary cluster deployment activity.
+
+This allows truly independent deployments, removes manual tasks, and delivers a real-world CI/CD workflow at enterprise level.
 
 ## Getting Started
 
@@ -222,6 +259,13 @@ kubectl apply -f kubernetes/argocd/umbrella-application.yaml
 # Check all ArgoCD application status:
 kubectl get applications -n argocd
 
+```
+**Option D: Jenkins**
+```bash
+We have created 3 Jenkinsfile for building and pushing docker images ECR.
+Those 3 jobs act as CI part of deployment
+We also made sure that the Jenkins runs using Github Webhook but only when changes are made either in backend, frontend, or admin service and no jobs run if changes are made out these folders.
+These CI Jenkinsfile call the job for then deploying the changes made in images using Helm method and hence no manual intervention is needed for deployment and that helps us implement end to end CI-CD. 
 ```
 
 ### 3. Create users in MongoDB after the mongodb pods are healthy
