@@ -259,7 +259,6 @@ kubectl get applications -n argocd
 
 ```
 **Option D: Jenkins**
-```bash
 - CI Admin
  ![CI Admin](Screenshots/ciadmin1.png)
  ![alt](Screenshots/ciadmin2.png)
@@ -272,7 +271,6 @@ kubectl get applications -n argocd
 - Common CD
  ![Common CD](Screenshots/cd1.png)
  ![alt](Screenshots/cd2.png)
-```
 
 ### 3. Create users in MongoDB after the mongodb pods are healthy
 
