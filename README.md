@@ -283,10 +283,6 @@ kubectl get secrets -n shopnow-demo1
 # Check ingress
 kubectl get ing -n shopnow-demo1
 
-<img width="902" height="877" alt="Screenshot 2025-11-28 185658" src="https://github.com/user-attachments/assets/b26df25a-15fa-4a8b-95a3-2f8a4ef6b93b" />
-
-<img width="937" height="492" alt="Screenshot 2025-11-28 185605" src="https://github.com/user-attachments/assets/edee521e-6330-4094-b43f-92dd829bcb47" />
-
 
 # Sequence to debug in case of any issue with the pods
 kubectl get pods -n shopnow-demo1
@@ -294,6 +290,10 @@ kubectl describe pod backend-746cc99cd-cqrgf -n shopnow-demo1 # Assuming that po
 kubectl logs backend-746cc99cd-cqrgf -n shopnow-demo1 --previous # If no details are found in the above command or if details like liveness probe failed are coming
 
 ```
+<img width="902" height="877" alt="Screenshot 2025-11-28 185658" src="https://github.com/user-attachments/assets/b26df25a-15fa-4a8b-95a3-2f8a4ef6b93b" />
+
+<img width="937" height="492" alt="Screenshot 2025-11-28 185605" src="https://github.com/user-attachments/assets/edee521e-6330-4094-b43f-92dd829bcb47" />
+
 
 
 ---
