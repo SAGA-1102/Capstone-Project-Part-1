@@ -262,10 +262,7 @@ kubectl get applications -n argocd
 ```
 **Option D: Jenkins**
 ```bash
-We have created 3 Jenkinsfile for building and pushing docker images ECR.
-Those 3 jobs act as CI part of deployment
-We also made sure that the Jenkins runs using Github Webhook but only when changes are made either in backend, frontend, or admin service and no jobs run if changes are made out these folders.
-These CI Jenkinsfile call the job for then deploying the changes made in images using Helm method and hence no manual intervention is needed for deployment and that helps us implement end to end CI-CD. 
+
 ```
 
 ### 3. Create users in MongoDB after the mongodb pods are healthy
