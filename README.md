@@ -39,15 +39,9 @@ shopNow/
 
 - There are three dedicated Jenkinsfiles for CI — one each for:
 
-  ```
-  backend 
-  ```
-  ```
-  frontend
-  ```
-  ```
-  admin
-  ```
+  ```backend ```
+  ```frontend```
+  ```admin```
 - A commit in any of these folders only triggers CI for that specific service
 
 - Each CI pipeline:
