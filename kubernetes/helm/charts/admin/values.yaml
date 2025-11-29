@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-aviral/admin
+  repository: 975050024946.dkr.ecr.ca-central-1.amazonaws.com/shopnow-ash/admin
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -18,8 +18,8 @@ nginx:
       root /usr/share/nginx/html;
       index index.html;
 
-      # Admin API - proxy to backend for aryan-admin (general catch-all)
-      location /aryan-admin/api/ {
+      # Admin API - proxy to backend for ash-admin (general catch-all)
+      location /ash-admin/api/ {
         proxy_pass http://backend:5000/api/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -28,21 +28,21 @@ nginx:
         proxy_read_timeout 90;
       }
       
-      # Handle static assets within /aryan-admin/static/ - map to /static/
-      location /aryan-admin/static/ {
+      # Handle static assets within /ash-admin/static/ - map to /static/
+      location /ash-admin/static/ {
         alias /usr/share/nginx/html/static/;
         expires 30d;
         add_header Cache-Control "public, immutable";
       }
       
-      # Handle other static assets (favicon, etc.) within /aryan-admin/
-      location ~ ^/aryan-admin/(.*\.(css|js|map|svg|gif|png|jpg|jpeg|ico|woff2?|ttf|eot))$ {
+      # Handle other static assets (favicon, etc.) within /ash-admin/
+      location ~ ^/ash-admin/(.*\.(css|js|map|svg|gif|png|jpg|jpeg|ico|woff2?|ttf|eot))$ {
         alias /usr/share/nginx/html/$1;
         expires 30d;
         add_header Cache-Control "public, immutable";
       }
       
-      # Handle /aryan-admin path - serve the React app
+      # Handle /ash-admin path - serve the React app
       # This catches all paths and serves index.html for SPA routing
       location / {
         try_files $uri $uri/ /index.html;
@@ -75,7 +75,7 @@ hpa:
 
 ingress:
   enabled: true
-  path: /aviral-admin
+  path: /ash-admin
   pathType: Prefix
   host: ""                      # optional host; leave blank for path-only routing
   annotations:
