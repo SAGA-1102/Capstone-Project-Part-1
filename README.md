@@ -1,6 +1,11 @@
 
 # 🛒 ShopNow E-Commerce - Capstone Project
 
+This project delivers a fully automated CI/CD workflow where Terraform builds the entire AWS setup—including VPC, subnets, NAT, and an EKS cluster—while Jenkins handles the application lifecycle end to end. Each service is containerized with Docker, Jenkins builds and tags the images, pushes them to ECR, and then triggers Helm deployments to EKS. The cluster pulls the latest images, updates the services automatically, and exposes the application through an AWS Load Balancer DNS. The result is a clean, efficient DevOps pipeline with zero manual deployment steps and smooth, repeatable releases.
+
+---
+
+
 ShopNow is a **Capstone project** built around a full-stack MERN e-commerce application:
 - **Customer App** (React frontend)  
 - **Admin Dashboard** (React admin panel)  
@@ -24,6 +29,8 @@ shopNow/
 ├── jenkins/               # Pipeline definitions (CI & CD)       
 ├── docs/                  # learning resources and guides
 └── scripts/               # Automation and utility scripts
+└── Terraform/              
+│   └── main.tf            #terraform script for vpc,subnets,eks
 ```
 
 ---
