@@ -12,6 +12,9 @@ ShopNow is a **Capstone project** built around a full-stack MERN e-commerce appl
 Each component is versioned, dockerized, and deployed individually, allowing independent updates and rapid iteration.
 
 ---
+## Deployment Architecture Diagram 
+<img width="1794" height="798" alt="Deployment_Architecture" src="https://github.com/user-attachments/assets/eaf24248-27db-44f2-9940-c70905d8b3e7" />
+
 
 ## 📁 Project Structure
 
