@@ -67,6 +67,9 @@ aws ecr create-repository --repository-name <your-username>-shopnow/admin --regi
 aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account-id>.dkr.ecr.<region>.amazonaws.com
 ```
 
+<img width="1630" height="312" alt="Screenshot 2025-11-29 145624" src="https://github.com/user-attachments/assets/24343a73-64ab-4679-aedf-5ab16171479f" />
+
+
 #### 3. Terraform Infrastructure Creation
 
 Terraform provisions the complete AWS foundation required for running Kubernetes on EKS:
